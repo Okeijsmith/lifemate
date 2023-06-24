@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>&lt;model-viewer&gt; template</title>
+    <meta charset="utf-8">
+    <meta name="description" content="&lt;model-viewer&gt; template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" href="./styles.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <!-- <model-viewer> HTML element -->
+    <model-viewer id="Swing" src="basket_swing_chair.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls poster="poster.webp" shadow-intensity="1">
+      <div class="progress-bar hide" slot="progress-bar">
+          <div class="update-bar"></div>
+      </div>
+      <button slot="ar-button" id="ar-button">
+          View in your space
+      </button>
+      <div id="ar-prompt">
+          <img src="ar_hand_prompt.png">
+      </div>
+
+      <a id="back-button" href="https://www.figma.com/proto/FgVXjGB97a9kG5YNToe6G5/Planta?type=design&node-id=0-1&viewport=-109%2C406%2C0.1&scaling=scale-down&starting-point-node-id=1%3A181">
+        <button>Back to Planta</button>
+      </a>
+      
+      
+
+      <div class="controls">
+        <div>
+          <p>Customize frame</p>
+          <select id="diffuse">
+            <option value="">None</option>
+            <option value="ShoeTextures/Rectangle197.png">Frame1</option>
+            <option value="ShoeTextures/Rectangle198.png">Frame2</option>
+            <option value="ShoeTextures/Rectangle202.png">Frame3</option>
+          </select>
+        </div>
+
+        <div>
+          <p>Customize seat</p>
+          <select id="diffuse1">
+            <option value="">None</option>
+            <option value="ShoeTextures/Rectangle197.png">Seat1</option>
+            <option value="ShoeTextures/Rectangle198.png">Seat2</option>
+            <option value="ShoeTextures/Rectangle202.png">Seat3</option>
+          </select>
+        </div>
+
+            </div>
+            <p>Change color</p>
+            <div class="controls" id="color-controls">
+              <button data-color="#ff0000">Red</button>
+              <button data-color="#00ff00">Green</button>
+              <button data-color="#0000ff">Blue</button>
+              <button data-color="#111111">Black</button>
+            </div>
+        </model-viewer>  
+    
+        <script type="module">
+    const modelViewerTexture1 = document.querySelector("model-viewer#Swing");
+    
+    modelViewerTexture1.addEventListener("load", () => {
+    
+      const material = modelViewerTexture1.model.materials[0];
+    
+      const createAndApplyTexture = async (channel, event) => {
+        const texture = await modelViewerTexture1.createTexture(event.target.value);
+        if (channel.includes('base') || channel.includes('metallic')) {
+          material.pbrMetallicRoughness[channel].setTexture(texture);
+        } else {
+          material[channel].setTexture(texture);
+        }
+      }
+    
+      document.querySelector('#diffuse').addEventListener('input', (event) => {
+        createAndApplyTexture('baseColorTexture', event);
+      });
+    
+    });
+    
+    </script>
+
+<script type="module">
+  const modelViewerTexture2 = document.querySelector("model-viewer#Swing");
+  
+  modelViewerTexture2.addEventListener("load", () => {
+  
+    const material = modelViewerTexture2.model.materials[1];
+  
+    const createAndApplyTexture = async (channel, event) => {
+      const texture = await modelViewerTexture2.createTexture(event.target.value);
+      if (channel.includes('base') || channel.includes('metallic')) {
+        material.pbrMetallicRoughness[channel].setTexture(texture);
+      } else {
+        material[channel].setTexture(texture);
+      }
+    }
+  
+    document.querySelector('#diffuse1').addEventListener('input', (event) => {
+      createAndApplyTexture('baseColorTexture', event);
+    });
+  
+  });
+  
+  </script>
+
+<script>
+  const modelViewerColor = document.querySelector("model-viewer#Swing");
+  
+  document.querySelector('#color-controls').addEventListener('click', (event) => {
+    const colorString = event.target.dataset.color;
+    const [material] = modelViewerColor.model.materials;
+    material.pbrMetallicRoughness.setBaseColorFactor(colorString);
+  });
+  </script>
+
+
+    <script src="script.js"></script>
+    <!-- Loads <model-viewer> for browsers: -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.1/model-viewer.min.js"></script>
+  </body>
+</html>
